@@ -1,0 +1,34 @@
+{% extends "core_app/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="mt-6 px-6 py-12 bg-light rounded-xl" style="background-color:#E2DE99">
+    <h2 class="mb-4 text-center display-4 border border-3 rounded " style="background-color:#EAE842" >My Items</h2>
+    <div class="row" style="background-color:#EAE842" name="div1">
+        {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <a href="{% url 'item:detail' item.id %}">
+                    <div class="card border-0 shadow-sm" style="background-color:#CDE45A">
+                        <img src="{{ item.image.url }}" class="card-img-top rounded-top" alt="{{ item.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name |slice:":12" }}{% if item.name|length > 12 %}...{% endif %}</h5>
+                            <p class="card-text text-muted">Price: {{ item.price }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                </div><div class="row" style="background-color:#EAE842" name="div1">
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .card:hover {
+        transform: scale(1.05); /* Increase the size of the card on hover */
+        transition: transform 0.3s ease; /* Add a smooth transition effect */
+    }
+</style>
+{% endblock %}

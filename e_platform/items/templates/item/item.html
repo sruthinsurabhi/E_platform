@@ -1,0 +1,49 @@
+{% extends 'core_app/base.html' %}
+{% block title%}Items{% endblock %}
+
+{% block content%}
+<div class="container py-6">
+    <div class="row">
+        <div class="col-md-3">
+            <form method="get" action="{% url 'item:items_b' %}">
+                <div class="input-group mb-3">
+                    <input name="query" type="text" class="form-control" value="{{query}}" placeholder="Find a bike, a chair, or a car....">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+            <hr class="my-6">
+            <p class="semi-bold">Categories</p>
+            <ul>
+                {% for category in categories %}
+                <li class="py-2 px-2 rounded-xl {% if category.id == category_id %} bg-gray-200 {% endif %}">
+                    <a href='{% url 'item:items_b' %}?query={{query}}&category={{category.id}}'>{{category.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            <hr class="my-6">
+            <p class="semi-bold">
+                <a href="{% url 'item:items_b' %}" class="btn btn-warning btn-block">Clear Filters</a>
+            </p>
+        </div>
+        <div class="col-span-3">
+            <div class="row row-cols-1 row-cols-md-3 g-4 rounded" style="background-color:#EAE842" name="div1">
+                {% for item in items %}
+                <div class="col">
+                    <a href="{% url 'item:detail' item.id %}">
+                        <div class="card h-100 border-0 shadow-sm" style="background-color:#CDE45A">
+                            <img src="{{ item.image.url }}" class="card-img-top rounded-top" alt="{{ item.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.name |slice:":12" }}{% if item.name|length > 12 %}...{% endif %}</h5>
+                                <p class="card-text text-muted">Price: {{ item.price }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'core_app/base.html' %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ item.image.url }}" class="img-fluid rounded dec_div" alt="{{ item.name }}">
+        </div>
+        <div class="col-md-6">
+            <div class=" p-4 rounded dec_div" style="background-color:#EEEDDA">
+                <h1 class="mb-4">{{ item.name }}</h1>
+                <p class="text-muted"><strong>Price:</strong> ${{ item.price }}</p>
+                {% if item.description %}
+                    <p class="text-muted"><strong>Description:</strong> {{ item.description }}</p>
+                {% endif %}
+                {% if request.user == item.created_by %}
+                <div class="mt-6 p-6 bg-white rounded-xl shadow">
+                    
+                    <p class="mb-4 ml-3">This is Your Item!</p>
+                    <a href="{% url 'item:edit' item.id %}" class="btn btn-success mb-3 ml-3">
+                        <i class="bi bi-trash"></i> Edit
+                    </a>
+                    <a href="{% url 'item:delete' item.id %}" class="btn btn-danger mb-3 ml-3">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                </div>
+                
+                    
+                        
+                {% else %}
+
+                    <p class="text-muted"><strong>Seller:</strong> {{ item.created_by.username }}</p>
+                    <a href="{% url 'communication:new' item.id %}" class="btn btn-primary">Contact Seller</a>
+                 {% endif%}   
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-6 px-6 py-12 bg-light rounded-xl" style="background-color:#E2DE99">
+    <h2 class="mb-4 text-center display-4 border border-3 rounded " style="background-color:#EAE842" >Related Items</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 rounded" style="background-color:#EAE842" name="div1">
+        {% for item in related_items %}
+            <div class="col">
+                <a href="{% url 'item:detail' item.id %}">
+                    <div class="card h-100 border-0 shadow-sm" style="background-color:#CDE45A">
+                        <img src="{{ item.image.url }}" class="card-img-top rounded-top" name="rel_img" alt="{{ item.name }}" style="width:300px; height: 300px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text text-muted">Price: {{ item.price }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .dec_div:hover {
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
+    }
+</style>
+
+{% endblock %}

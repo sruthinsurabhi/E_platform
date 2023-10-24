@@ -1,0 +1,32 @@
+{% extends 'core_app/base.html' %}
+{% block title %}Conversation{% endblock %}
+
+{% block content %}
+<style>
+    .message-item:hover {
+        background-color: #f5f5f5; /* Change the background color on hover */
+        cursor: pointer; /* Change the cursor on hover */
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="mb-4 display-4">Conversation</h1>
+    <div class="list-group">
+        {% for message in conversation.messages.all %}
+            <div class="list-group-item list-group-item-action message-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <p class="mb-2"><strong>{{ message.created_by.username }} </strong> @{{ message.created_at }}</p>
+                        <p>{{ message.content }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<form method="post" action=".">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-primary btn-block mt-4">Send</button>
+</form>
+{% endblock %}
